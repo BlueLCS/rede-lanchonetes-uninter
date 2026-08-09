@@ -1,8 +1,11 @@
+import type { PaymentGateway } from "../contracts/payment-gateway";
 import { StockReservationError } from "../../domain/errors/stock-reservation-error";
+import type { Order } from "../../domain/entities/order";
 import { OrderChannel } from "../../domain/enums/order-channel";
 import { UserRole } from "../../domain/enums/user-role";
 import type { MenuRepository } from "../../domain/repositories/menu-repository";
 import type { OrderRepository } from "../../domain/repositories/order-repository";
+import type { PaymentRepository } from "../../domain/repositories/payment-repository";
 import type { UnitRepository } from "../../domain/repositories/unit-repository";
 import type { UserRepository } from "../../domain/repositories/user-repository";
 import { AppError } from "../../shared/errors/app-error";
@@ -34,7 +37,9 @@ class CreateOrderUseCase {
     private readonly userRepository: UserRepository,
     private readonly unitRepository: UnitRepository,
     private readonly menuRepository: MenuRepository,
-    private readonly orderRepository: OrderRepository
+    private readonly orderRepository: OrderRepository,
+    private readonly paymentGateway: PaymentGateway,
+    private readonly paymentRepository: PaymentRepository
   ) {}
 
   async execute(
@@ -138,18 +143,21 @@ class CreateOrderUseCase {
     const desconto = 0;
     const valorTotal = roundMoney(subtotal - desconto);
 
+    let pedido: Order;
+
     try {
-      return await this.orderRepository.createWithStockReservation({
-        clienteId: input.clienteId,
-        unidadeId: input.unidadeId,
-        canalPedido: input.canalPedido,
-        formaPagamento: input.formaPagamento,
-        subtotal,
-        desconto,
-        valorTotal,
-        usuarioOperacaoId: actor.userId,
-        itens: itensComPreco
-      });
+      pedido =
+        await this.orderRepository.createWithStockReservation({
+          clienteId: input.clienteId,
+          unidadeId: input.unidadeId,
+          canalPedido: input.canalPedido,
+          formaPagamento: input.formaPagamento,
+          subtotal,
+          desconto,
+          valorTotal,
+          usuarioOperacaoId: actor.userId,
+          itens: itensComPreco
+        });
     } catch (error) {
       if (error instanceof StockReservationError) {
         throw new AppError(
@@ -167,6 +175,32 @@ class CreateOrderUseCase {
 
       throw error;
     }
+
+    const gatewayResult =
+      await this.paymentGateway.requestPayment({
+        pedidoId: pedido.id,
+        valor: pedido.valorTotal,
+        formaPagamento: pedido.formaPagamento,
+        canalPedido: pedido.canalPedido
+      });
+
+    const processedPayment =
+      await this.paymentRepository.process({
+        pedidoId: pedido.id,
+        usuarioId: actor.userId,
+        valor: pedido.valorTotal,
+        status: gatewayResult.status,
+        transacaoExternaId:
+          gatewayResult.transacaoExternaId,
+        payloadEnvio: gatewayResult.payloadEnvio,
+        payloadRetorno: gatewayResult.payloadRetorno
+      });
+
+    return {
+      ...pedido,
+      status: processedPayment.statusPedido,
+      pagamento: processedPayment.pagamento
+    };
   }
 }
 
