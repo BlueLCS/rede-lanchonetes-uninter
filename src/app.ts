@@ -11,6 +11,8 @@ import { menuRoutes } from "./api/routes/menu.routes";
 import { productRoutes } from "./api/routes/product.routes";
 import { stockRoutes } from "./api/routes/stock.routes";
 import { orderRoutes } from "./api/routes/order.routes";
+import { consentRoutes } from "./api/routes/consent.routes";
+import { loyaltyRoutes } from "./api/routes/loyalty.routes";
 
 const app = express();
 
@@ -26,6 +28,9 @@ app.use("/produtos", productRoutes);
 app.use("/unidades", menuRoutes);
 app.use("/estoque", stockRoutes);
 app.use("/pedidos", orderRoutes);
+app.use("/consentimentos", consentRoutes);
+app.use("/consentimentos", consentRoutes);
+app.use("/fidelidade", loyaltyRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
