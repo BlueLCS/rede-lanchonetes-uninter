@@ -9,6 +9,7 @@ import { healthRoutes } from "./api/routes/health.routes";
 import { unitRoutes } from "./api/routes/unit.routes";
 import { menuRoutes } from "./api/routes/menu.routes";
 import { productRoutes } from "./api/routes/product.routes";
+import { stockRoutes } from "./api/routes/stock.routes";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/auth", authRoutes);
 app.use("/unidades", unitRoutes);
 app.use("/produtos", productRoutes);
 app.use("/unidades", menuRoutes);
+app.use("/estoque", stockRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
