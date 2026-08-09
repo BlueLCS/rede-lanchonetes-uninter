@@ -13,6 +13,7 @@ import { stockRoutes } from "./api/routes/stock.routes";
 import { orderRoutes } from "./api/routes/order.routes";
 import { consentRoutes } from "./api/routes/consent.routes";
 import { loyaltyRoutes } from "./api/routes/loyalty.routes";
+import { audit } from "./api/middlewares/audit";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(helmet());
 app.use(cors());
 app.use(requestId);
 app.use(express.json());
+app.use(audit);
 
 app.use(healthRoutes);
 app.use("/auth", authRoutes);
@@ -28,7 +30,6 @@ app.use("/produtos", productRoutes);
 app.use("/unidades", menuRoutes);
 app.use("/estoque", stockRoutes);
 app.use("/pedidos", orderRoutes);
-app.use("/consentimentos", consentRoutes);
 app.use("/consentimentos", consentRoutes);
 app.use("/fidelidade", loyaltyRoutes);
 
