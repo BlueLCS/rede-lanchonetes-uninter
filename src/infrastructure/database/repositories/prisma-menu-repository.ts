@@ -39,6 +39,25 @@ function mapMenuItem(item: PrismaMenuData): MenuItem {
 }
 
 class PrismaMenuRepository implements MenuRepository {
+  async findByUnitAndProduct(
+    unidadeId: string,
+    produtoId: string
+  ): Promise<MenuItem | null> {
+    const item = await prisma.produtoUnidade.findUnique({
+      where: {
+        unidadeId_produtoId: {
+          unidadeId,
+          produtoId
+        }
+      },
+      include: {
+        produto: true
+      }
+    });
+
+    return item ? mapMenuItem(item) : null;
+  }
+
   async listAvailableByUnit(
     unidadeId: string,
     page: number,

@@ -10,6 +10,7 @@ import { unitRoutes } from "./api/routes/unit.routes";
 import { menuRoutes } from "./api/routes/menu.routes";
 import { productRoutes } from "./api/routes/product.routes";
 import { stockRoutes } from "./api/routes/stock.routes";
+import { orderRoutes } from "./api/routes/order.routes";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/unidades", unitRoutes);
 app.use("/produtos", productRoutes);
 app.use("/unidades", menuRoutes);
 app.use("/estoque", stockRoutes);
+app.use("/pedidos", orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

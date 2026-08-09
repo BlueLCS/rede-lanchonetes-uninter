@@ -13,6 +13,11 @@ type ListMenuResult = {
 };
 
 interface MenuRepository {
+  findByUnitAndProduct(
+    unidadeId: string,
+    produtoId: string
+  ): Promise<MenuItem | null>;
+
   listAvailableByUnit(
     unidadeId: string,
     page: number,
