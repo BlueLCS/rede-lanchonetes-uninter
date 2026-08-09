@@ -7,6 +7,12 @@ type GenerateTokenData = {
   unidadeId: string | null;
 };
 
+type AuthenticatedUser = {
+  userId: string;
+  perfil: UserRole;
+  unidadeId: string | null;
+};
+
 class JwtTokenService {
   private readonly secret: string;
 
@@ -40,6 +46,43 @@ class JwtTokenService {
       }
     );
   }
+
+  verify(token: string): AuthenticatedUser {
+    const payload = jwt.verify(token, this.secret, {
+      algorithms: ["HS256"],
+      issuer: "rede-lanchonetes-api",
+      audience: "rede-lanchonetes-client"
+    });
+
+    if (
+      typeof payload === "string" ||
+      typeof payload.sub !== "string" ||
+      typeof payload.perfil !== "string"
+    ) {
+      throw new Error("Token com conteúdo inválido.");
+    }
+
+    const validRoles = Object.values(UserRole);
+    const perfil = payload.perfil as UserRole;
+
+    if (!validRoles.includes(perfil)) {
+      throw new Error("Perfil do token inválido.");
+    }
+
+    if (
+      payload.unidadeId !== null &&
+      typeof payload.unidadeId !== "string"
+    ) {
+      throw new Error("Unidade do token inválida.");
+    }
+
+    return {
+      userId: payload.sub,
+      perfil,
+      unidadeId: payload.unidadeId
+    };
+  }
 }
 
 export { JwtTokenService };
+export type { AuthenticatedUser };
