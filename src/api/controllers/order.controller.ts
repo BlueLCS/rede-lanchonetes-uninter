@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { CreateOrderUseCase } from "../../application/usecases/create-order.use-case";
+import { GetOrderPaymentUseCase } from "../../application/usecases/get-order-payment.use-case";
+import { ListOrdersUseCase } from "../../application/usecases/list-orders.use-case";
 import type { AuthenticatedUser } from "../../infrastructure/security/jwt-token-service";
 
 class OrderController {
   constructor(
-    private readonly createOrderUseCase: CreateOrderUseCase
+    private readonly createOrderUseCase: CreateOrderUseCase,
+    private readonly listOrdersUseCase: ListOrdersUseCase,
+    private readonly getOrderPaymentUseCase: GetOrderPaymentUseCase
   ) {}
 
   create = async (
@@ -25,6 +29,55 @@ class OrderController {
       );
 
       response.status(201).json(pedido);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  list = async (
+    _request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const auth =
+        response.locals.auth as AuthenticatedUser;
+
+      const result = await this.listOrdersUseCase.execute(
+        response.locals.validatedQuery,
+        {
+          userId: auth.userId,
+          perfil: auth.perfil,
+          unidadeId: auth.unidadeId
+        }
+      );
+
+      response.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getPayment = async (
+    _request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const auth =
+        response.locals.auth as AuthenticatedUser;
+
+      const pagamento =
+        await this.getOrderPaymentUseCase.execute(
+          response.locals.validatedParams.pedidoId,
+          {
+            userId: auth.userId,
+            perfil: auth.perfil,
+            unidadeId: auth.unidadeId
+          }
+        );
+
+      response.status(200).json(pagamento);
     } catch (error) {
       next(error);
     }
