@@ -3,6 +3,7 @@ import { UserRole } from "../../domain/enums/user-role";
 import type { OrderQueryRepository } from "../../domain/repositories/order-query-repository";
 import type { OrderWorkflowRepository } from "../../domain/repositories/order-workflow-repository";
 import { AppError } from "../../shared/errors/app-error";
+import type { CreditDeliveredOrderPointsUseCase } from "./credit-delivered-order-points.use-case";
 
 type UpdateStatusActor = {
   userId: string;
@@ -32,7 +33,8 @@ const transitions: Partial<
 class UpdateOrderStatusUseCase {
   constructor(
     private readonly orderQueryRepository: OrderQueryRepository,
-    private readonly workflowRepository: OrderWorkflowRepository
+  private readonly workflowRepository: OrderWorkflowRepository,
+  private readonly creditDeliveredOrderPointsUseCase: CreditDeliveredOrderPointsUseCase
   ) {}
 
   async execute(
@@ -107,15 +109,24 @@ class UpdateOrderStatusUseCase {
       );
     }
 
-    return this.workflowRepository.updateStatus({
-      pedidoId,
-      usuarioId: actor.userId,
-      statusAnterior: pedido.status,
-      statusNovo: input.status,
-      motivo:
-        input.motivo?.trim() ||
-        "Atualização operacional do pedido"
-    });
+    const updatedOrder =
+  await this.workflowRepository.updateStatus({
+    pedidoId,
+    usuarioId: actor.userId,
+    statusAnterior: pedido.status,
+    statusNovo: input.status,
+    motivo:
+      input.motivo?.trim() ||
+      "Atualização operacional do pedido"
+  });
+
+if (input.status === OrderStatus.ENTREGUE) {
+  await this.creditDeliveredOrderPointsUseCase.execute(
+    pedidoId
+  );
+}
+
+return updatedOrder;
   }
 }
 

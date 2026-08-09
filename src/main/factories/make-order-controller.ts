@@ -12,6 +12,10 @@ import { PrismaPaymentRepository } from "../../infrastructure/database/repositor
 import { PrismaUnitRepository } from "../../infrastructure/database/repositories/prisma-unit-repository";
 import { PrismaUserRepository } from "../../infrastructure/database/repositories/prisma-user-repository";
 import { MockPaymentGateway } from "../../infrastructure/payment/mock-payment-gateway";
+import { CreditDeliveredOrderPointsUseCase } from "../../application/usecases/credit-delivered-order-points.use-case";
+import { PrismaConsentRepository } from "../../infrastructure/database/repositories/prisma-consent-repository";
+import { PrismaLoyaltyRepository } from "../../infrastructure/database/repositories/prisma-loyalty-repository";
+
 
 function makeOrderController() {
   const userRepository = new PrismaUserRepository();
@@ -24,6 +28,16 @@ function makeOrderController() {
     new PrismaOrderWorkflowRepository();
   const paymentRepository = new PrismaPaymentRepository();
   const paymentGateway = new MockPaymentGateway();
+  const loyaltyRepository =
+  new PrismaLoyaltyRepository();
+const consentRepository =
+  new PrismaConsentRepository();
+
+const creditDeliveredOrderPointsUseCase =
+  new CreditDeliveredOrderPointsUseCase(
+    loyaltyRepository,
+    consentRepository
+  );
 
   const createOrderUseCase = new CreateOrderUseCase(
     userRepository,
@@ -45,11 +59,11 @@ function makeOrderController() {
     );
 
   const updateOrderStatusUseCase =
-    new UpdateOrderStatusUseCase(
-      orderQueryRepository,
-      workflowRepository
-    );
-
+  new UpdateOrderStatusUseCase(
+    orderQueryRepository,
+    workflowRepository,
+    creditDeliveredOrderPointsUseCase
+  );
   const cancelOrderUseCase = new CancelOrderUseCase(
     orderQueryRepository,
     workflowRepository
