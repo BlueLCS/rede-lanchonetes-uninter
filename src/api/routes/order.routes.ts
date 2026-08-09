@@ -10,6 +10,11 @@ import {
   listOrdersQuerySchema,
   orderPaymentParamsSchema
 } from "../validators/order-query.schemas";
+import {
+  cancelOrderSchema,
+  orderIdParamsSchema,
+  updateOrderStatusSchema
+} from "../validators/order-workflow.schemas";
 import { createOrderSchema } from "../validators/order.schema";
 
 const orderRoutes = Router();
@@ -52,6 +57,34 @@ orderRoutes.get(
   ),
   validateParams(orderPaymentParamsSchema),
   orderController.getPayment
+);
+
+orderRoutes.patch(
+  "/:id/status",
+  authenticate,
+  authorizeRoles(
+    UserRole.ADMIN,
+    UserRole.GERENTE,
+    UserRole.COZINHA,
+    UserRole.ATENDENTE
+  ),
+  validateParams(orderIdParamsSchema),
+  validateBody(updateOrderStatusSchema),
+  orderController.updateStatus
+);
+
+orderRoutes.post(
+  "/:id/cancelamento",
+  authenticate,
+  authorizeRoles(
+    UserRole.ADMIN,
+    UserRole.GERENTE,
+    UserRole.ATENDENTE,
+    UserRole.CLIENTE
+  ),
+  validateParams(orderIdParamsSchema),
+  validateBody(cancelOrderSchema),
+  orderController.cancel
 );
 
 export { orderRoutes };
