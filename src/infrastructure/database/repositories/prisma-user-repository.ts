@@ -1,5 +1,5 @@
-import { UserRole } from "../../../domain/enums/user-role";
 import type { User } from "../../../domain/entities/user";
+import { UserRole } from "../../../domain/enums/user-role";
 import type {
   CreateUserData,
   UserRepository
@@ -34,6 +34,16 @@ function mapUser(usuario: PrismaUserData): User {
 }
 
 class PrismaUserRepository implements UserRepository {
+  async findById(id: string): Promise<User | null> {
+    const usuario = await prisma.usuario.findUnique({
+      where: {
+        id
+      }
+    });
+
+    return usuario ? mapUser(usuario) : null;
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     const usuario = await prisma.usuario.findUnique({
       where: {
@@ -41,11 +51,7 @@ class PrismaUserRepository implements UserRepository {
       }
     });
 
-    if (!usuario) {
-      return null;
-    }
-
-    return mapUser(usuario);
+    return usuario ? mapUser(usuario) : null;
   }
 
   async create(data: CreateUserData): Promise<User> {
