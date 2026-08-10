@@ -1,3 +1,15 @@
+import { openApiPathsPartOne } from "./openapi-paths-1";
+
+const errorExample = {
+  timestamp: "2026-08-10T12:00:00.000Z",
+  status: 422,
+  code: "DADOS_INVALIDOS",
+  message: "Os dados enviados são inválidos.",
+  path: "/pedidos",
+  details: [],
+  requestId: "39e3693e-ae9d-4cc6-a106-3311155df14f"
+};
+
 const openApiDocument = {
   openapi: "3.0.3",
 
@@ -17,8 +29,7 @@ const openApiDocument = {
 
   tags: [
     {
-      name: "Sistema",
-      description: "Verificação da API"
+      name: "Sistema"
     },
     {
       name: "Autenticação"
@@ -64,20 +75,16 @@ const openApiDocument = {
             format: "date-time"
           },
           status: {
-            type: "integer",
-            example: 422
+            type: "integer"
           },
           code: {
-            type: "string",
-            example: "DADOS_INVALIDOS"
+            type: "string"
           },
           message: {
-            type: "string",
-            example: "Os dados enviados são inválidos."
+            type: "string"
           },
           path: {
-            type: "string",
-            example: "/pedidos"
+            type: "string"
           },
           details: {
             type: "array",
@@ -86,8 +93,93 @@ const openApiDocument = {
             }
           },
           requestId: {
-            type: "string",
-            example: "código da requisição"
+            type: "string"
+          }
+        }
+      }
+    },
+
+    responses: {
+      ValidationError: {
+        description: "Dados inválidos.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/StandardError"
+            },
+            example: errorExample
+          }
+        }
+      },
+
+      UnauthorizedError: {
+        description: "Token ausente, inválido ou expirado.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/StandardError"
+            },
+            example: {
+              ...errorExample,
+              status: 401,
+              code: "TOKEN_INVALIDO",
+              message:
+                "O token informado é inválido ou expirou."
+            }
+          }
+        }
+      },
+
+      ForbiddenError: {
+        description: "Perfil sem permissão.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/StandardError"
+            },
+            example: {
+              ...errorExample,
+              status: 403,
+              code: "PERFIL_SEM_PERMISSAO",
+              message:
+                "O usuário não possui permissão para esta ação."
+            }
+          }
+        }
+      },
+
+      NotFoundError: {
+        description: "Recurso não encontrado.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/StandardError"
+            },
+            example: {
+              ...errorExample,
+              status: 404,
+              code: "RECURSO_NAO_ENCONTRADO",
+              message:
+                "O recurso informado não foi encontrado."
+            }
+          }
+        }
+      },
+
+      ConflictError: {
+        description: "Conflito com uma regra de negócio.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/StandardError"
+            },
+            example: {
+              ...errorExample,
+              status: 409,
+              code: "CONFLITO_REGRA_NEGOCIO",
+              message:
+                "A operação não pode ser concluída."
+            }
           }
         }
       }
@@ -102,7 +194,7 @@ const openApiDocument = {
 
         responses: {
           "200": {
-            description: "API disponível",
+            description: "API disponível.",
             content: {
               "application/json": {
                 example: {
@@ -113,7 +205,9 @@ const openApiDocument = {
           }
         }
       }
-    }
+    },
+
+    ...openApiPathsPartOne
   }
 };
 
