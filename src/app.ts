@@ -14,6 +14,8 @@ import { orderRoutes } from "./api/routes/order.routes";
 import { consentRoutes } from "./api/routes/consent.routes";
 import { loyaltyRoutes } from "./api/routes/loyalty.routes";
 import { audit } from "./api/middlewares/audit";
+import swaggerUi from "swagger-ui-express";
+import { openApiDocument } from "./docs/openapi";
 
 const app = express();
 
@@ -22,6 +24,18 @@ app.use(cors());
 app.use(requestId);
 app.use(express.json());
 app.use(audit);
+
+app.get("/openapi.json", (_request, response) => {
+  response.status(200).json(openApiDocument);
+});
+
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(openApiDocument, {
+    customSiteTitle: "Rede de Lanchonetes - API"
+  })
+);
 
 app.use(healthRoutes);
 app.use("/auth", authRoutes);
