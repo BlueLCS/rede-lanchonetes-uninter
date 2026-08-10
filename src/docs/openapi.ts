@@ -1,4 +1,5 @@
 import { openApiPathsPartOne } from "./openapi-paths-1";
+import { openApiPathsPartTwo } from "./openapi-paths-2";
 
 const errorExample = {
   timestamp: "2026-08-10T12:00:00.000Z",
@@ -207,7 +208,8 @@ const openApiDocument = {
       }
     },
 
-    ...openApiPathsPartOne
+    ...openApiPathsPartOne,
+    ...openApiPathsPartTwo
   }
 };
 
