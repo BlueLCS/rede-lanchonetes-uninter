@@ -1,0 +1,49 @@
+$kind: http-request
+name: post 2 - cliente nao admin
+description: ""
+url: http://localhost:3000/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"cliente@exemplo.com\",\r
+
+    \  \"senha\": \"Senha123!\"\r
+
+    }"
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Login do cliente realizado\", function () {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.collectionVariables.set(\r
+
+      \  \"clienteToken\",\r
+
+      \  response.accessToken\r
+
+      );\r
+
+      \r
+
+      pm.collectionVariables.set(\r
+
+      \  \"clienteRefreshToken\",\r
+
+      \  response.refreshToken\r
+
+      );"
+    language: text/javascript
+order: 1084824266788588

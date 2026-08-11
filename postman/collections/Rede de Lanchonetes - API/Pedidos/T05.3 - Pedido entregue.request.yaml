@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos/{{pedidoId}}/status"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "ENTREGUE"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T05.3 - Status HTTP 200", function () {
+        pm.response.to.have.status(200);
+      });
+      const response = pm.response.json();
+      pm.test("T05.3 - Pedido entregue", function () {
+        pm.expect(response.status).to.eql("ENTREGUE");
+        pm.expect(response.entregueEm).to.be.a("string");
+      });
+    language: text/javascript
+order: 5000

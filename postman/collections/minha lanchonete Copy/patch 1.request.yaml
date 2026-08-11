@@ -1,0 +1,17 @@
+$kind: http-request
+name: patch 1
+description: ""
+url: http://localhost:3000/unidades/759c5434-852d-4670-bcd0-25d402d1b344
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Lanchonete Norte - Unidade 1\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4499853986110886

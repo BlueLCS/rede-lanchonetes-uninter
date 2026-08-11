@@ -1,0 +1,12 @@
+$kind: http-request
+name: get 3
+description: ""
+url: http://localhost:3000/estoque?unidadeId=00000000-0000-4000-8000-000000000001
+method: GET
+queryParams:
+  unidadeId: 00000000-0000-4000-8000-000000000001
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503598892560826

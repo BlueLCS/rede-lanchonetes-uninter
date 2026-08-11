@@ -1,0 +1,47 @@
+$kind: collection
+name: minha lanchonete Copy
+variables:
+  - key: supabase_service_role_api_key_0ki4
+    secret: true
+    disabled: false
+  - key: baseUrl
+    value: ""
+    disabled: false
+  - key: clienteToken
+    value: ""
+    disabled: false
+  - key: clienteRefreshToken
+    value: ""
+    disabled: false
+  - key: unidadeId
+    value: ""
+    disabled: false
+  - key: clienteId
+    value: ""
+    disabled: false
+  - key: produtoId
+    value: ""
+    disabled: false
+  - key: produtoPagamentoNegadoId
+    value: ""
+    disabled: false
+  - key: pedidoId
+    value: ""
+    disabled: false
+  - key: pedidoRecusadoId
+    value: ""
+    disabled: false
+  - key: AdminToken
+    value: ""
+    disabled: false
+  - key: AdminRefreshToken
+    value: ""
+    disabled: false
+auth:
+  - id: ba2c317d-8f45-438b-8bee-ffcbe70aad02
+    type: bearer
+    name: Bearer Token
+    credentials:
+      token: "{{adminToken}}"
+    rules:
+      url: Request Headers

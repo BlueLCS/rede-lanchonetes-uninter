@@ -1,0 +1,17 @@
+$kind: http-request
+name: post 12
+description: ""
+url: http://localhost:3000/pedidos/f8e9e498-148a-4782-b345-911c9eb0f532/cancelamento
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"motivo\": \"Cancelamento do pedido pendente para teste\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599618792222

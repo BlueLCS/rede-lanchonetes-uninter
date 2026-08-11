@@ -1,0 +1,31 @@
+$kind: http-request
+name: entregue
+description: ""
+url: "{{baseUrl}}/pedidos/{{pedidoId}}/status"
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"status\": \"ENTREGUE\"\r\n}"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"T05.3 - Status HTTP 200\", function () {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.test(\"T05.3 - Pedido entregue\", function () {\r
+
+      \  pm.expect(response.status).to.eql(\"ENTREGUE\");\r
+
+      \  pm.expect(response.entregueEm).to.be.a(\"string\");\r
+
+      });"
+    language: text/javascript
+order: 1583493748851

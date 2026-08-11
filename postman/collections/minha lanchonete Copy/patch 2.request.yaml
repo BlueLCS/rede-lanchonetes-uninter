@@ -1,0 +1,19 @@
+$kind: http-request
+name: patch 2
+description: ""
+url: http://localhost:3000/pedidos/51bc60ec-55df-4d24-868b-4493f7c2d7a7/status
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \  \"status\": \"ENTREGUE\",\r
+
+    \  \"motivo\": \"Pedido entregue ao cliente\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599354440934

@@ -1,0 +1,19 @@
+$kind: http-request
+name: post 11
+description: ""
+url: http://localhost:3000/consentimentos
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"finalidade\": \"PROGRAMA_FIDELIDADE\",\r
+
+    \  \"versaoTermo\": \"1.0\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599599791774

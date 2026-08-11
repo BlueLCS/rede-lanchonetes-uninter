@@ -1,0 +1,19 @@
+$kind: http-request
+name: put 1
+description: ""
+url: http://localhost:3000/unidades/00000000-0000-4000-8000-000000000001/cardapio/18fddd57-633e-49df-8840-6262027f3df2
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"preco\": 21.9,\r
+
+    \  \"disponivel\": true\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503588018078036

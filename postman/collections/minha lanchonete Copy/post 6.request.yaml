@@ -1,0 +1,33 @@
+$kind: http-request
+name: post 6
+description: ""
+url: http://localhost:3000/unidades
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Lanchonete Norte\",\r
+
+    \  \"tipo\": \"FRANQUIA\",\r
+
+    \  \"unidadeMatrizId\": \"00000000-0000-4000-8000-000000000001\",\r
+
+    \  \"logradouro\": \"Avenida Principal\",\r
+
+    \  \"numero\": \"250\",\r
+
+    \  \"bairro\": \"Centro\",\r
+
+    \  \"cidade\": \"Brasília\",\r
+
+    \  \"uf\": \"DF\",\r
+
+    \  \"cep\": \"70000-000\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4497940431706858

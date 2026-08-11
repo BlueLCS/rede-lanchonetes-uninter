@@ -1,0 +1,20 @@
+$kind: collection
+description: Coleção de testes da API da rede de lanchonetes. Execute uma vez, na ordem apresentada, com a API e o PostgreSQL ativos.
+variables:
+  baseUrl: http://localhost:3000
+  adminToken: ""
+  adminRefreshToken: ""
+  clienteToken: ""
+  clienteRefreshToken: ""
+  unidadeId: 00000000-0000-4000-8000-000000000001
+  clienteId: 00000000-0000-4000-8000-000000000012
+  produtoId: ""
+  produtoPagamentoNegadoId: ""
+  pedidoId: ""
+  pedidoRecusadoId: ""
+auth:
+  - id: 4a68be15-f292-4b5c-b16e-39e47545431a
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{adminToken}}"

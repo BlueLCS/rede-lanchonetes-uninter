@@ -1,0 +1,15 @@
+$kind: http-request
+name: post 10
+description: ""
+url: http://localhost:3000/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"cliente@exemplo.com\",\r
+
+    \  \"senha\": \"Senha123!\"\r
+
+    }"
+order: 4503599587650772

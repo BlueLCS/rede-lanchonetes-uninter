@@ -1,0 +1,30 @@
+$kind: http-request
+url: "{{baseUrl}}/produtos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nome": "Produto sem permissão",
+      "descricao": "Teste do controle de acesso",
+      "categoria": "LANCHE"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T08 - Status HTTP 403", function () {
+        pm.response.to.have.status(403);
+      });
+
+      const response = pm.response.json();
+      pm.test("T08 - Perfil sem permissão", function () {
+        pm.expect(response.code).to.eql("PERFIL_SEM_PERMISSAO");
+      });
+    language: text/javascript
+order: 2000

@@ -1,0 +1,13 @@
+$kind: http-request
+name: post 13
+description: ""
+url: http://localhost:3000/fidelidade/resgates
+method: POST
+body:
+  type: json
+  content: "{\r\n  \"pontos\": 10\r\n}"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599625900476

@@ -1,0 +1,27 @@
+$kind: http-request
+name: post 8
+description: ""
+url: http://localhost:3000/estoque/movimentacoes
+method: POST
+body:
+  type: json
+  content: "\r
+
+    {\r
+
+    \  \"unidadeId\": \"00000000-0000-4000-8000-000000000001\",\r
+
+    \  \"produtoId\": \"18fddd57-633e-49df-8840-6262027f3df2\",\r
+
+    \  \"tipo\": \"SAIDA\",\r
+
+    \  \"quantidade\": 1000,\r
+
+    \  \"motivo\": \"Teste de estoque insuficiente\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503594057236932

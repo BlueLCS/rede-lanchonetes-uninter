@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos?canalPedido=TOTEM&status=PAGAMENTO_APROVADO"
+method: GET
+queryParams:
+  canalPedido: TOTEM
+  status: PAGAMENTO_APROVADO
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T04 - Status 200", function () {
+        pm.response.to.have.status(200);
+      });
+      const response = pm.response.json();
+      pm.test("T04 - Lista retornada", function () {
+        pm.expect(response.items).to.be.an("array");
+      });
+      pm.test("T04 - Canal e status corretos", function () {
+        response.items.forEach(function (order) {
+          pm.expect(order.canalPedido).to.eql("TOTEM");
+          pm.expect(order.status).to.eql("PAGAMENTO_APROVADO");
+        });
+      });
+    language: text/javascript
+order: 2000

@@ -1,0 +1,52 @@
+$kind: http-request
+name: get 5
+description: ""
+url: http://localhost:3000/pedidos?status=PAGAMENTO_APROVADO
+method: GET
+queryParams:
+  status: PAGAMENTO_APROVADO
+auth:
+  type: bearer
+  credentials:
+    token: ""
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"T04 - Status 200\", function () {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.test(\"T04 - Lista retornada\", function () {\r
+
+      \  pm.expect(response.items).to.be.an(\"array\");\r
+
+      });\r
+
+      \r
+
+      pm.test(\"T04 - Canal e status corretos\", function () {\r
+
+      \  response.items.forEach(function (order) {\r
+
+      \    pm.expect(order.canalPedido).to.eql(\"TOTEM\");\r
+
+      \r
+
+      \    pm.expect(order.status).to.eql(\r
+
+      \      \"PAGAMENTO_APROVADO\"\r
+
+      \    );\r
+
+      \  });\r
+
+      });"
+    language: text/javascript
+order: 1588757266001

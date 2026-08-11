@@ -1,0 +1,13 @@
+$kind: http-request
+name: patch status
+description: ""
+url: http://localhost:3000/pedidos/26df275d-9296-47e0-bec4-11499eb79771/status
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"status\": \"ENTREGUE\"\r\n}"
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599627311097

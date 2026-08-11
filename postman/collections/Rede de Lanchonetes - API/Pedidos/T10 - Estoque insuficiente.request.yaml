@@ -1,0 +1,36 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "canalPedido": "APP",
+      "clienteId": "{{clienteId}}",
+      "unidadeId": "{{unidadeId}}",
+      "itens": [
+        {
+          "produtoId": "{{produtoId}}",
+          "quantidade": 9999
+        }
+      ],
+      "formaPagamento": "MOCK"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T10 - Status HTTP 409", function () {
+        pm.response.to.have.status(409);
+      });
+      const response = pm.response.json();
+      pm.test("T10 - Estoque insuficiente", function () {
+        pm.expect(response.code).to.eql("ESTOQUE_INSUFICIENTE");
+      });
+    language: text/javascript
+order: 7000

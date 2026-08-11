@@ -1,0 +1,13 @@
+$kind: http-request
+name: get 7
+description: ""
+url: http://localhost:3000/fidelidade/saldo
+method: GET
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599609175958

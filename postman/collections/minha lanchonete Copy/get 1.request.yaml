@@ -1,0 +1,9 @@
+$kind: http-request
+name: get 1
+description: ""
+url: http://localhost:3000/unidades?page=1&limit=10
+method: GET
+queryParams:
+  page: "1"
+  limit: "10"
+order: 4459867989803009

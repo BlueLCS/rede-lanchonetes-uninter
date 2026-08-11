@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos/{{pedidoRecusadoId}}/pagamento"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T06.2 - Status HTTP 200", function () {
+        pm.response.to.have.status(200);
+      });
+      const response = pm.response.json();
+      pm.test("T06.2 - Pagamento mock recusado", function () {
+        pm.expect(response.provedor).to.eql("MOCK");
+        pm.expect(response.status).to.eql("RECUSADO");
+        pm.expect(response.payloadRetorno).to.be.an("object");
+      });
+    language: text/javascript
+order: 2000

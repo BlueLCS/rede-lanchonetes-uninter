@@ -1,0 +1,39 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "canalPedido": "TOTEM",
+      "clienteId": "{{clienteId}}",
+      "unidadeId": "{{unidadeId}}",
+      "itens": [
+        {
+          "produtoId": "{{produtoId}}",
+          "quantidade": 1
+        }
+      ],
+      "formaPagamento": "MOCK"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T03 - Status 201", function () {
+        pm.response.to.have.status(201);
+      });
+
+      const response = pm.response.json();
+      pm.test("T03 - Pedido aprovado", function () {
+        pm.expect(response.status).to.eql("PAGAMENTO_APROVADO");
+        pm.expect(response.canalPedido).to.eql("TOTEM");
+      });
+      pm.collectionVariables.set("pedidoId", response.id);
+    language: text/javascript
+order: 1000

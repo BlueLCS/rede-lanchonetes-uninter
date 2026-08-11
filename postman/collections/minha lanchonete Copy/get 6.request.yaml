@@ -1,0 +1,12 @@
+$kind: http-request
+name: get 6
+description: ""
+url: http://localhost:3000/pedidos?status=AGUARDANDO_PAGAMENTO
+method: GET
+queryParams:
+  status: AGUARDANDO_PAGAMENTO
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503599377392701

@@ -1,0 +1,58 @@
+$kind: http-request
+name: post 1 - login admin
+url: http://localhost:3000/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"admin@lanchonete.local\",\r
+
+    \  \"senha\": \"Senha123!\"\r
+
+    }"
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"T01 - Status 200\", function () {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.test(\"T01 - Tokens retornados\", function () {\r
+
+      \  pm.expect(response.accessToken).to.be.a(\"string\");\r
+
+      \  pm.expect(response.refreshToken).to.be.a(\"string\");\r
+
+      });\r
+
+      \r
+
+      pm.collectionVariables.set(\r
+
+      \  \"adminToken\",\r
+
+      \  response.accessToken\r
+
+      );\r
+
+      \r
+
+      pm.collectionVariables.set(\r
+
+      \  \"adminRefreshToken\",\r
+
+      \  response.refreshToken\r
+
+      );"
+    language: text/javascript
+order: 1786323692861

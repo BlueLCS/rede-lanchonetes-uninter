@@ -1,0 +1,32 @@
+$kind: http-request
+name: post pedido em preparo
+url: "{{baseUrl}}/pedidos/{{pedidoId}}/status"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"status\": \"EM_PREPARO\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"T05.1 - Status HTTP 200\", function () {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.test(\"T05.1 - Pedido em preparo\", function () {\r
+
+      \  pm.expect(response.status).to.eql(\"EM_PREPARO\");\r
+
+      });"
+    language: text/javascript
+order: 1495004416432

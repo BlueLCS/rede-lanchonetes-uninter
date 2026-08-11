@@ -1,0 +1,38 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "canalPedido": "BALCAO",
+      "clienteId": "{{clienteId}}",
+      "unidadeId": "{{unidadeId}}",
+      "itens": [
+        {
+          "produtoId": "{{produtoId}}",
+          "quantidade": 1
+        }
+      ],
+      "formaPagamento": "MOCK"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T09 - Status HTTP 422", function () {
+        pm.response.to.have.status(422);
+      });
+      const response = pm.response.json();
+      pm.test("T09 - Resposta padronizada", function () {
+        pm.expect(response.code).to.be.a("string");
+        pm.expect(response.message).to.be.a("string");
+        pm.expect(response.requestId).to.be.a("string");
+      });
+    language: text/javascript
+order: 6000

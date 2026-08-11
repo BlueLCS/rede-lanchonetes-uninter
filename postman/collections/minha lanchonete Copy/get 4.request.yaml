@@ -1,0 +1,13 @@
+$kind: http-request
+name: get 4
+description: ""
+url: http://localhost:3000/pedidos/4c096450-5508-4d71-9362-d8332da669c1/pagamento
+method: GET
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 4503598945980809

@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos/{{pedidoId}}/status"
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"status\": \"PRONTO\"\r\n}"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"T05.2 - Status HTTP 200\", function () {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.test(\"T05.2 - Pedido pronto\", function () {\r
+
+      \  pm.expect(response.status).to.eql(\"PRONTO\");\r
+
+      });"
+    language: text/javascript
+order: 1572331326917

@@ -1,0 +1,37 @@
+$kind: http-request
+url: "{{baseUrl}}/pedidos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "canalPedido": "WEB",
+      "clienteId": "{{clienteId}}",
+      "unidadeId": "{{unidadeId}}",
+      "itens": [
+        {
+          "produtoId": "{{produtoPagamentoNegadoId}}",
+          "quantidade": 30
+        }
+      ],
+      "formaPagamento": "MOCK"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T06.1 - Status HTTP 201", function () {
+        pm.response.to.have.status(201);
+      });
+      const response = pm.response.json();
+      pm.test("T06.1 - Pedido cancelado pelo pagamento", function () {
+        pm.expect(response.status).to.eql("CANCELADO");
+      });
+      pm.collectionVariables.set("pedidoRecusadoId", response.id);
+    language: text/javascript
+order: 1000

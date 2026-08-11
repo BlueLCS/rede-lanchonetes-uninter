@@ -1,0 +1,426 @@
+openapi: 3.0.0
+info:
+  title: Request Headers
+  version: 1.0.0
+  description: ''
+servers:
+  - url: 'http://localhost:3000'
+  - url: '{{baseUrl}}'
+paths:
+  /auth/login:
+    post:
+      summary: post 1 - login admin
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                senha:
+                  type: string
+            example:
+              email: admin@lanchonete.local
+              senha: Senha123!
+  '/unidades/{unidadeId}/cardapio':
+    get:
+      summary: get .1
+      responses: {}
+      tags:
+        - Produtos
+    parameters:
+      - name: unidadeId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ''
+  '/pedidos/{pedidoId}/status':
+    post:
+      summary: post pedido em preparo
+      responses: {}
+      tags:
+        - Pedidos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+            example:
+              status: EM_PREPARO
+    parameters:
+      - name: pedidoId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ''
+    patch:
+      summary: pronto
+      responses: {}
+      tags:
+        - Pedidos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+            example:
+              status: PRONTO
+  /pedidos:
+    get:
+      summary: get 5
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+          example: PAGAMENTO_APROVADO
+      responses: {}
+      tags:
+        - Pedidos
+      security:
+        - BearerAuth: []
+    post:
+      summary: aprovado
+      responses: {}
+      tags:
+        - Pedidos
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                canalPedido:
+                  type: string
+                clienteId:
+                  type: string
+                unidadeId:
+                  type: string
+                itens:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      produtoId:
+                        type: string
+                      quantidade:
+                        type: integer
+                formaPagamento:
+                  type: string
+            example:
+              canalPedido: TOTEM
+              clienteId: ''
+              unidadeId: ''
+              itens:
+                - produtoId: ''
+                  quantidade: 1
+              formaPagamento: MOCK
+  /auth/refresh:
+    post:
+      summary: post 4
+      responses: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+            example:
+              refreshToken: 9f50c3e026a6438fa0724edeafaffc2a663275acd74cc4589adad668756851ec68cc7883a8aa74ebfa03a4ffca2fd365
+  /auth/logout:
+    post:
+      summary: post 5
+      responses: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+            example:
+              refreshToken: 9f50c3e026a6438fa0724edeafaffc2a663275acd74cc4589adad668756851ec68cc7883a8aa74ebfa03a4ffca2fd365
+  /unidades:
+    get:
+      summary: get 1
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 10
+      responses: {}
+    post:
+      summary: post 6
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                tipo:
+                  type: string
+                unidadeMatrizId:
+                  type: string
+                logradouro:
+                  type: string
+                numero:
+                  type: string
+                  format: color
+                bairro:
+                  type: string
+                cidade:
+                  type: string
+                uf:
+                  type: string
+                cep:
+                  type: string
+            example:
+              nome: Lanchonete Norte
+              tipo: FRANQUIA
+              unidadeMatrizId: 00000000-0000-4000-8000-000000000001
+              logradouro: Avenida Principal
+              numero: '250'
+              bairro: Centro
+              cidade: Brasília
+              uf: DF
+              cep: 70000-000
+  /unidades/759c5434-852d-4670-bcd0-25d402d1b344:
+    patch:
+      summary: patch 1
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+            example:
+              nome: Lanchonete Norte - Unidade 1
+  /produtos:
+    post:
+      summary: post 7
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                descricao:
+                  type: string
+                categoria:
+                  type: string
+            example:
+              nome: X-Salada
+              descricao: 'Pão, carne, queijo, salada e molho'
+              categoria: LANCHE
+  /unidades/00000000-0000-4000-8000-000000000001/cardapio/18fddd57-633e-49df-8840-6262027f3df2:
+    put:
+      summary: put 1
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                preco:
+                  type: number
+                disponivel:
+                  type: boolean
+            example:
+              preco: 21.9
+              disponivel: true
+  /estoque/movimentacoes:
+    post:
+      summary: post 8
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                unidadeId:
+                  type: string
+                produtoId:
+                  type: string
+                tipo:
+                  type: string
+                quantidade:
+                  type: integer
+                motivo:
+                  type: string
+            example:
+              unidadeId: 00000000-0000-4000-8000-000000000001
+              produtoId: 18fddd57-633e-49df-8840-6262027f3df2
+              tipo: SAIDA
+              quantidade: 1000
+              motivo: Teste de estoque insuficiente
+  /estoque:
+    get:
+      summary: get 3
+      parameters:
+        - name: unidadeId
+          in: query
+          schema:
+            type: string
+          example: 00000000-0000-4000-8000-000000000001
+      responses: {}
+      security:
+        - BearerAuth: []
+  /pedidos/4c096450-5508-4d71-9362-d8332da669c1/pagamento:
+    get:
+      summary: get 4
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /pedidos/51bc60ec-55df-4d24-868b-4493f7c2d7a7/status:
+    patch:
+      summary: patch 2
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                motivo:
+                  type: string
+            example:
+              status: ENTREGUE
+              motivo: Pedido entregue ao cliente
+  /consentimentos:
+    post:
+      summary: post 11
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                finalidade:
+                  type: string
+                versaoTermo:
+                  type: string
+                  format: utc-millisec
+            example:
+              finalidade: PROGRAMA_FIDELIDADE
+              versaoTermo: '1.0'
+  /fidelidade/saldo:
+    get:
+      summary: get 7
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /pedidos/f8e9e498-148a-4782-b345-911c9eb0f532/cancelamento:
+    post:
+      summary: post 12
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+            example:
+              motivo: Cancelamento do pedido pendente para teste
+  /fidelidade/resgates:
+    post:
+      summary: post 13
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pontos:
+                  type: integer
+            example:
+              pontos: 10
+  /pedidos/26df275d-9296-47e0-bec4-11499eb79771/status:
+    patch:
+      summary: patch status
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+            example:
+              status: ENTREGUE
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

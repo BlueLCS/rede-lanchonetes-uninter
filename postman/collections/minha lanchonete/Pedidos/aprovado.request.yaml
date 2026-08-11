@@ -1,0 +1,72 @@
+$kind: http-request
+description: ""
+url: http://localhost:3000/pedidos
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"canalPedido\": \"TOTEM\",\r
+
+    \  \"clienteId\": \"{{clienteId}}\",\r
+
+    \  \"unidadeId\": \"{{unidadeId}}\",\r
+
+    \  \"itens\": [\r
+
+    \    {\r
+
+    \      \"produtoId\": \"{{produtoId}}\",\r
+
+    \      \"quantidade\": 1\r
+
+    \    }\r
+
+    \  ],\r
+
+    \  \"formaPagamento\": \"MOCK\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{clienteToken}}"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"T03 - Status 201\", function () {\r
+
+      \  pm.response.to.have.status(201);\r
+
+      });\r
+
+      \r
+
+      const response = pm.response.json();\r
+
+      \r
+
+      pm.test(\"T03 - Pedido aprovado\", function () {\r
+
+      \  pm.expect(response.status).to.eql(\r
+
+      \    \"PAGAMENTO_APROVADO\"\r
+
+      \  );\r
+
+      \r
+
+      \  pm.expect(response.canalPedido).to.eql(\"TOTEM\");\r
+
+      });\r
+
+      \r
+
+      pm.collectionVariables.set(\r
+
+      \  \"pedidoId\",\r
+
+      \  response.id\r
+
+      );"
+    language: text/javascript
+order: 1786323870036

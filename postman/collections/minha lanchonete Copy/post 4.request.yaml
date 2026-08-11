@@ -1,0 +1,15 @@
+$kind: http-request
+name: post 4
+description: ""
+url: http://localhost:3000/auth/refresh
+method: POST
+body:
+  type: json
+  content: "\r
+
+    {\r
+
+    \  \"refreshToken\": \"9f50c3e026a6438fa0724edeafaffc2a663275acd74cc4589adad668756851ec68cc7883a8aa74ebfa03a4ffca2fd365\"\r
+
+    }"
+order: 3860464614982772

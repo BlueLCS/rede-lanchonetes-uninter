@@ -1,0 +1,32 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "admin@lanchonete.local",
+      "senha": "Senha123!"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T01 - Status 200", function () {
+        pm.response.to.have.status(200);
+      });
+
+      const response = pm.response.json();
+
+      pm.test("T01 - Tokens retornados", function () {
+        pm.expect(response.accessToken).to.be.a("string");
+        pm.expect(response.refreshToken).to.be.a("string");
+      });
+
+      pm.collectionVariables.set("adminToken", response.accessToken);
+      pm.collectionVariables.set("adminRefreshToken", response.refreshToken);
+    language: text/javascript
+order: 1000

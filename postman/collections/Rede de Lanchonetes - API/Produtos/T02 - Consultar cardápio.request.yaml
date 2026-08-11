@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/unidades/{{unidadeId}}/cardapio"
+method: GET
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T02 - Status 200", function () {
+        pm.response.to.have.status(200);
+      });
+
+      const response = pm.response.json();
+      pm.test("T02 - Cardápio possui produtos", function () {
+        pm.expect(response.items).to.be.an("array");
+        pm.expect(response.items.length).to.be.above(0);
+      });
+
+      const firstProduct = response.items[0];
+      pm.collectionVariables.set("produtoId", firstProduct.produtoId);
+      const deniedProduct = response.items.find(function (product) {
+        return product.nome === "X-Burger";
+      }) || firstProduct;
+      pm.collectionVariables.set("produtoPagamentoNegadoId", deniedProduct.produtoId);
+    language: text/javascript
+order: 1000

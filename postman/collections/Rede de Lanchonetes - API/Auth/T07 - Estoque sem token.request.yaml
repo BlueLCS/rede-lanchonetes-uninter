@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/estoque?unidadeId={{unidadeId}}"
+method: GET
+queryParams:
+  unidadeId: "{{unidadeId}}"
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("T07 - Status HTTP 401", function () {
+        pm.response.to.have.status(401);
+      });
+
+      const response = pm.response.json();
+      pm.test("T07 - Token não informado", function () {
+        pm.expect(response.code).to.eql("TOKEN_NAO_INFORMADO");
+      });
+    language: text/javascript
+order: 3000
